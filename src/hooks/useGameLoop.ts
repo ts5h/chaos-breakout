@@ -25,12 +25,12 @@ export function useGameLoop(
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // 物理演算
+    // Physics simulation
     updateBallPosition(gameState.ball)
     handleBoundaryCollision(gameState.ball, gameState.boundary)
     handleBlockCollision(gameState.ball, gameState.blocks)
 
-    // 描画
+    // Rendering
     clearCanvas(ctx)
     drawBoundary(ctx, gameState.boundary)
     drawBall(ctx, gameState.ball)
@@ -46,13 +46,13 @@ export function useGameLoop(
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // 初期描画
+    // Initial rendering
     clearCanvas(ctx)
     drawBoundary(ctx, gameState.boundary)
     drawBall(ctx, gameState.ball)
     drawBlocks(ctx, gameState.blocks)
 
-    // ゲームループ開始
+    // Start game loop
     animationIdRef.current = requestAnimationFrame(gameLoop)
 
     return () => {

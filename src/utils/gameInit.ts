@@ -22,7 +22,7 @@ export function createInitialBlocks(): Block[] {
       const blockY =
         row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y
 
-      // 境界内にブロックを大量配置
+      // Place blocks inside boundary in large quantities
       if (
         isPointInside(
           blockX + GAME_CONFIG.BLOCK_WIDTH / 2,

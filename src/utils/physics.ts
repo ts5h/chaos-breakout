@@ -28,7 +28,7 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
     const hitX = !isPointInside(nextX, ball.y, boundary)
     const hitY = !isPointInside(ball.x, nextY, boundary)
 
-    // 単純で確実な反射：該当する軸の速度を反転
+    // Simple and reliable reflection: reverse velocity on affected axis
     if (hitX) {
       ball.vx = -ball.vx
     }
@@ -36,9 +36,9 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
       ball.vy = -ball.vy
     }
 
-    // 両方に当たった場合（角）は両軸を反転
+    // If hit both axes (corner), reverse both axes
     if (hitX && hitY) {
-      // 角での反射：両軸反転 + 追加のランダム要素
+      // Corner reflection: reverse both axes + additional random factor
       const randomFactor =
         GAME_CONFIG.CORNER_RANDOM_FACTOR_MIN +
         Math.random() *
@@ -48,7 +48,7 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
       ball.vy *= randomFactor
     }
 
-    // 反発角にランダムなブレを追加
+    // Add random variation to reflection angle
     const currentAngle = Math.atan2(ball.vy, ball.vx)
     const angleVariation =
       (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION
@@ -70,7 +70,7 @@ export function handleBlockCollision(ball: Ball, blocks: Block[]): void {
       ball.y - ball.radius < block.y + block.height
     ) {
       block.destroyed = true
-      // ブロックとの衝突時も反発角にブレを追加
+      // Add angle variation to block collision reflection as well
       ball.vy = -ball.vy
       const angle = Math.atan2(ball.vy, ball.vx)
       const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy)

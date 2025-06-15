@@ -1,0 +1,65 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Development Commands
+
+- `pnpm dev` - Start development server with hot module replacement
+- `pnpm build` - Build for production (runs TypeScript compiler then Vite build)
+- `pnpm lint` - Check code with Biome linter
+- `pnpm lint:fix` - Fix auto-fixable linting issues with Biome
+- `pnpm format` - Format code with Biome formatter
+- `pnpm preview` - Preview production build locally
+
+## Project Architecture
+
+This is a chaos-style breakout game built with React, TypeScript, and Canvas API. The codebase follows a modular architecture with clear separation of concerns.
+
+### Game Architecture
+
+The game uses a custom hook-based architecture:
+
+- **useGameState**: Manages immutable game state (ball, blocks, boundary)
+- **useGameLoop**: Handles the animation loop, physics updates, and rendering
+- **GameCanvas**: React component that owns the canvas and coordinates the game
+
+### Physics System
+
+The physics system implements chaotic ball behavior:
+- Ball reflection includes 10° random angle variation (`REFLECTION_ANGLE_VARIATION`)
+- Boundary collision uses ray-casting algorithm for complex polygon shapes
+- Axis-based collision detection prevents balls from getting stuck in walls
+- Corner collisions add additional randomness (0.8-1.2x speed multiplier)
+
+### Game Configuration
+
+All game parameters are centralized in `src/constants/game.ts`:
+- Canvas dimensions: 1200x800
+- Ball speed: 20 (very fast)
+- Complex boundary defined as static coordinate array
+- Block layout: 15x20 grid with 55x25 spacing
+
+### Code Organization
+
+```
+src/
+├── types/          # TypeScript interfaces (Ball, Block, GameState)
+├── constants/      # Game configuration and boundary coordinates  
+├── utils/          # Pure functions (physics, rendering, initialization)
+├── hooks/          # React hooks for state and game loop management
+└── components/     # React components (just GameCanvas)
+```
+
+### Styling and Tooling
+
+- **Biome**: Used for linting and formatting (replaces ESLint)
+- **SCSS**: Enabled via Sass package, files use .scss extension
+- **TypeScript**: Strict mode enabled
+- **pnpm**: Package manager with lockfile
+
+### Key Design Decisions
+
+1. **Mutable State in Hooks**: Game objects (ball, blocks) are intentionally mutable for performance in animation loops
+2. **Static Boundary**: Complex polygon defined as fixed coordinates rather than generated shapes
+3. **Chaos Physics**: Intentional unpredictability through angle variation and randomized corner bounces
+4. **No User Input**: Fully automated gameplay with no paddle or controls
