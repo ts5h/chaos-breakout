@@ -7,6 +7,7 @@ export function GameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const gameState = useGameState()
 
+  // @ts-ignore
   useGameLoop(canvasRef, gameState)
 
   return (

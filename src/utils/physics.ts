@@ -28,6 +28,10 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
     const hitX = !isPointInside(nextX, ball.y, boundary)
     const hitY = !isPointInside(ball.x, nextY, boundary)
 
+    // Store original velocity before reflection
+    const originalVx = ball.vx
+    const originalVy = ball.vy
+
     // Simple and reliable reflection: reverse velocity on affected axis
     if (hitX) {
       ball.vx = -ball.vx
@@ -36,27 +40,48 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
       ball.vy = -ball.vy
     }
 
-    // If hit both axes (corner), reverse both axes
+    // If hit both axes (corner), apply additional random factor
     if (hitX && hitY) {
-      // Corner reflection: reverse both axes + additional random factor
+      // Corner reflection: add random speed variation
       const randomFactor =
         GAME_CONFIG.CORNER_RANDOM_FACTOR_MIN +
         Math.random() *
           (GAME_CONFIG.CORNER_RANDOM_FACTOR_MAX -
             GAME_CONFIG.CORNER_RANDOM_FACTOR_MIN)
-      ball.vx *= randomFactor
-      ball.vy *= randomFactor
+      const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy)
+      const angle = Math.atan2(ball.vy, ball.vx)
+      ball.vx = Math.cos(angle) * speed * randomFactor
+      ball.vy = Math.sin(angle) * speed * randomFactor
+    } else {
+      // For non-corner collisions, add small angle variation
+      // but ensure it doesn't exceed 90 degrees from the reflected angle
+      const reflectedAngle = Math.atan2(ball.vy, ball.vx)
+      const angleVariation =
+        (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION
+      
+      // Ensure the new angle maintains the reflection
+      // by limiting variation to prevent going back to incident direction
+      const incidentAngle = Math.atan2(originalVy, originalVx)
+      let newAngle = reflectedAngle + angleVariation
+      
+      // Normalize angles to [-π, π]
+      const normalizeAngle = (a: number) => {
+        while (a > Math.PI) a -= 2 * Math.PI
+        while (a < -Math.PI) a += 2 * Math.PI
+        return a
+      }
+      
+      // Check if new angle is too close to incident angle
+      const angleDiff = Math.abs(normalizeAngle(newAngle - incidentAngle))
+      if (angleDiff < Math.PI / 2) {
+        // If too close to incident angle, use reflected angle without variation
+        newAngle = reflectedAngle
+      }
+      
+      const currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy)
+      ball.vx = Math.cos(newAngle) * currentSpeed
+      ball.vy = Math.sin(newAngle) * currentSpeed
     }
-
-    // Add random variation to reflection angle
-    const currentAngle = Math.atan2(ball.vy, ball.vx)
-    const angleVariation =
-      (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION
-    const newAngle = currentAngle + angleVariation
-    const currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy)
-
-    ball.vx = Math.cos(newAngle) * currentSpeed
-    ball.vy = Math.sin(newAngle) * currentSpeed
   }
 }
 
