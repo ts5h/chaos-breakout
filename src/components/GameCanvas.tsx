@@ -15,7 +15,6 @@ export function GameCanvas() {
       ref={canvasRef}
       width={GAME_CONFIG.WIDTH}
       height={GAME_CONFIG.HEIGHT}
-      style={{ border: '1px solid #333' }}
     />
   )
 }
