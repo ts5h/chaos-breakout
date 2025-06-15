@@ -22,19 +22,26 @@ export function createInitialBlocks(): Block[] {
       const blockY =
         row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y;
 
-      // Place blocks inside boundary in large quantities
-      if (
-        isPointInside(
-          blockX + GAME_CONFIG.BLOCK_WIDTH / 2,
-          blockY + GAME_CONFIG.BLOCK_HEIGHT / 2,
-          COMPLEX_BOUNDARY,
-        ) &&
-        Math.abs(blockX + GAME_CONFIG.BLOCK_WIDTH / 2 - GAME_CONFIG.WIDTH / 2) <
-          300 &&
-        Math.abs(
-          blockY + GAME_CONFIG.BLOCK_HEIGHT / 2 - GAME_CONFIG.HEIGHT / 2,
-        ) < 200
-      ) {
+      // Check all four corners of the block to ensure it's completely inside the boundary
+      const topLeft = isPointInside(blockX, blockY, COMPLEX_BOUNDARY);
+      const topRight = isPointInside(
+        blockX + GAME_CONFIG.BLOCK_WIDTH,
+        blockY,
+        COMPLEX_BOUNDARY,
+      );
+      const bottomLeft = isPointInside(
+        blockX,
+        blockY + GAME_CONFIG.BLOCK_HEIGHT,
+        COMPLEX_BOUNDARY,
+      );
+      const bottomRight = isPointInside(
+        blockX + GAME_CONFIG.BLOCK_WIDTH,
+        blockY + GAME_CONFIG.BLOCK_HEIGHT,
+        COMPLEX_BOUNDARY,
+      );
+
+      // Only place block if all corners are inside the boundary
+      if (topLeft && topRight && bottomLeft && bottomRight) {
         blocks.push({
           x: blockX,
           y: blockY,

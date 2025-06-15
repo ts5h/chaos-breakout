@@ -1,4 +1,4 @@
-import "./App.scss";
+import "./styles/components/App.scss";
 import { GameCanvas } from "./components/GameCanvas";
 
 function App() {
