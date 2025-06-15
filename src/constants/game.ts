@@ -1,4 +1,4 @@
-import type { Boundary } from '../types/game'
+import type { Boundary } from "../types/game";
 
 export const GAME_CONFIG = {
   WIDTH: 1200,
@@ -16,7 +16,7 @@ export const GAME_CONFIG = {
   REFLECTION_ANGLE_VARIATION: (10 * Math.PI) / 180, // 10° angle variation
   CORNER_RANDOM_FACTOR_MIN: 0.8,
   CORNER_RANDOM_FACTOR_MAX: 1.2,
-} as const
+} as const;
 
 export const COMPLEX_BOUNDARY: Boundary = [
   [200, 150],
@@ -49,4 +49,4 @@ export const COMPLEX_BOUNDARY: Boundary = [
   [110, 350],
   [140, 280],
   [170, 220],
-]
+];

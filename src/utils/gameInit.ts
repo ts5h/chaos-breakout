@@ -1,6 +1,6 @@
-import type { Ball, Block } from '../types/game'
-import { GAME_CONFIG, COMPLEX_BOUNDARY } from '../constants/game'
-import { isPointInside } from './physics'
+import type { Ball, Block } from "../types/game";
+import { GAME_CONFIG, COMPLEX_BOUNDARY } from "../constants/game";
+import { isPointInside } from "./physics";
 
 export function createInitialBall(): Ball {
   return {
@@ -9,18 +9,18 @@ export function createInitialBall(): Ball {
     vx: GAME_CONFIG.BALL_SPEED,
     vy: GAME_CONFIG.BALL_SPEED,
     radius: GAME_CONFIG.BALL_RADIUS,
-  }
+  };
 }
 
 export function createInitialBlocks(): Block[] {
-  const blocks: Block[] = []
+  const blocks: Block[] = [];
 
   for (let row = 0; row < GAME_CONFIG.BLOCK_ROWS; row++) {
     for (let col = 0; col < GAME_CONFIG.BLOCK_COLS; col++) {
       const blockX =
-        col * GAME_CONFIG.BLOCK_SPACING_X + GAME_CONFIG.BLOCK_OFFSET_X
+        col * GAME_CONFIG.BLOCK_SPACING_X + GAME_CONFIG.BLOCK_OFFSET_X;
       const blockY =
-        row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y
+        row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y;
 
       // Place blocks inside boundary in large quantities
       if (
@@ -41,10 +41,10 @@ export function createInitialBlocks(): Block[] {
           width: GAME_CONFIG.BLOCK_WIDTH,
           height: GAME_CONFIG.BLOCK_HEIGHT,
           destroyed: false,
-        })
+        });
       }
     }
   }
 
-  return blocks
+  return blocks;
 }
