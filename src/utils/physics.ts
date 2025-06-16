@@ -108,6 +108,71 @@ export function handleBlockCollision(ball: Ball, blocks: Block[]): void {
   }
 }
 
+export function handleBallToBallCollision(balls: Ball[]): void {
+  for (let i = 0; i < balls.length; i++) {
+    for (let j = i + 1; j < balls.length; j++) {
+      const ball1 = balls[i];
+      const ball2 = balls[j];
+      
+      const dx = ball2.x - ball1.x;
+      const dy = ball2.y - ball1.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const minDistance = ball1.radius + ball2.radius;
+      
+      if (distance < minDistance) {
+        // Balls are colliding
+        // Calculate collision normal
+        const nx = dx / distance;
+        const ny = dy / distance;
+        
+        // Relative velocity
+        const dvx = ball2.vx - ball1.vx;
+        const dvy = ball2.vy - ball1.vy;
+        
+        // Relative velocity in collision normal direction
+        const dvn = dvx * nx + dvy * ny;
+        
+        // Do not resolve if velocities are separating
+        if (dvn > 0) continue;
+        
+        // Collision impulse
+        const impulse = 2 * dvn / 2; // Equal mass assumption
+        
+        // Update velocities
+        ball1.vx -= impulse * nx;
+        ball1.vy -= impulse * ny;
+        ball2.vx += impulse * nx;
+        ball2.vy += impulse * ny;
+        
+        // Separate balls to prevent overlap
+        const overlap = minDistance - distance;
+        const separationX = nx * overlap * 0.5;
+        const separationY = ny * overlap * 0.5;
+        
+        ball1.x -= separationX;
+        ball1.y -= separationY;
+        ball2.x += separationX;
+        ball2.y += separationY;
+        
+        // Add some chaos to ball collisions
+        const angleVariation = (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION;
+        
+        // Apply angle variation to ball1
+        const speed1 = Math.sqrt(ball1.vx * ball1.vx + ball1.vy * ball1.vy);
+        const angle1 = Math.atan2(ball1.vy, ball1.vx) + angleVariation;
+        ball1.vx = Math.cos(angle1) * speed1;
+        ball1.vy = Math.sin(angle1) * speed1;
+        
+        // Apply opposite angle variation to ball2
+        const speed2 = Math.sqrt(ball2.vx * ball2.vx + ball2.vy * ball2.vy);
+        const angle2 = Math.atan2(ball2.vy, ball2.vx) - angleVariation;
+        ball2.vx = Math.cos(angle2) * speed2;
+        ball2.vy = Math.sin(angle2) * speed2;
+      }
+    }
+  }
+}
+
 export function updateBallPosition(ball: Ball): void {
   ball.x += ball.vx;
   ball.y += ball.vy;

@@ -2,14 +2,22 @@ import type { Ball, Block } from "../types/game";
 import { GAME_CONFIG, COMPLEX_BOUNDARY } from "../constants/game";
 import { isPointInside } from "./physics";
 
-export function createInitialBall(): Ball {
-  return {
-    x: GAME_CONFIG.WIDTH / 2,
-    y: GAME_CONFIG.HEIGHT / 2,
-    vx: GAME_CONFIG.BALL_SPEED,
-    vy: GAME_CONFIG.BALL_SPEED,
-    radius: GAME_CONFIG.BALL_RADIUS,
-  };
+export function createInitialBalls(): Ball[] {
+  const balls: Ball[] = [];
+  const angleStep = (2 * Math.PI) / 3;
+  
+  for (let i = 0; i < 3; i++) {
+    const angle = i * angleStep;
+    balls.push({
+      x: GAME_CONFIG.WIDTH / 2,
+      y: GAME_CONFIG.HEIGHT / 2,
+      vx: Math.cos(angle) * GAME_CONFIG.BALL_SPEED,
+      vy: Math.sin(angle) * GAME_CONFIG.BALL_SPEED,
+      radius: GAME_CONFIG.BALL_RADIUS,
+    });
+  }
+  
+  return balls;
 }
 
 export function createInitialBlocks(): Block[] {

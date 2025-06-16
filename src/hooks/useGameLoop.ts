@@ -4,11 +4,12 @@ import {
   updateBallPosition,
   handleBoundaryCollision,
   handleBlockCollision,
+  handleBallToBallCollision,
 } from "../utils/physics";
 import {
   clearCanvas,
   drawBoundary,
-  drawBall,
+  drawBalls,
   drawBlocks,
 } from "../utils/renderer";
 
@@ -16,7 +17,7 @@ export function useGameLoop(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   gameState: GameState,
 ) {
-  const animationIdRef = useRef<number>();
+  const animationIdRef = useRef<number | undefined>(undefined);
 
   const gameLoop = useCallback(() => {
     const canvas = canvasRef.current;
@@ -26,14 +27,17 @@ export function useGameLoop(
     if (!ctx) return;
 
     // Physics simulation
-    updateBallPosition(gameState.ball);
-    handleBoundaryCollision(gameState.ball, gameState.boundary);
-    handleBlockCollision(gameState.ball, gameState.blocks);
+    gameState.balls.forEach(ball => {
+      updateBallPosition(ball);
+      handleBoundaryCollision(ball, gameState.boundary);
+      handleBlockCollision(ball, gameState.blocks);
+    });
+    handleBallToBallCollision(gameState.balls);
 
     // Rendering
     clearCanvas(ctx);
     drawBoundary(ctx, gameState.boundary);
-    drawBall(ctx, gameState.ball);
+    drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
     animationIdRef.current = requestAnimationFrame(gameLoop);
@@ -49,7 +53,7 @@ export function useGameLoop(
     // Initial rendering
     clearCanvas(ctx);
     drawBoundary(ctx, gameState.boundary);
-    drawBall(ctx, gameState.ball);
+    drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
     // Start game loop

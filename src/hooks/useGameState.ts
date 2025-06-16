@@ -1,14 +1,14 @@
 import { useState } from "react";
 import type { GameState } from "../types/game";
 import { COMPLEX_BOUNDARY } from "../constants/game";
-import { createInitialBall, createInitialBlocks } from "../utils/gameInit";
+import { createInitialBalls, createInitialBlocks } from "../utils/gameInit";
 
 export function useGameState(): GameState {
-  const [ball] = useState(() => createInitialBall());
+  const [balls] = useState(() => createInitialBalls());
   const [blocks] = useState(() => createInitialBlocks());
 
   return {
-    ball,
+    balls,
     blocks,
     boundary: COMPLEX_BOUNDARY,
   };

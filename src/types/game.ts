@@ -17,7 +17,7 @@ export interface Block {
 export type Boundary = Array<[number, number]>;
 
 export interface GameState {
-  ball: Ball;
+  balls: Ball[];
   blocks: Block[];
   boundary: Boundary;
 }
