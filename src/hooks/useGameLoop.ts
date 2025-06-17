@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import type { GameState } from "../types/game";
 import {
   updateBallPosition,
@@ -7,16 +7,15 @@ import {
   handleBallToBallCollision,
 } from "../utils/physics";
 import {
-  drawBackground,
+  clearCanvas,
   drawBoundary,
   drawBalls,
   drawBlocks,
 } from "../utils/renderer";
 
 export function useGameLoop(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
+  canvasRef: RefObject<HTMLCanvasElement | null>,
   gameState: GameState,
-  backgroundImage: HTMLImageElement | null,
 ) {
   const animationIdRef = useRef<number | undefined>(undefined);
 
@@ -28,7 +27,7 @@ export function useGameLoop(
     if (!ctx) return;
 
     // Physics simulation
-    gameState.balls.forEach(ball => {
+    gameState.balls.forEach((ball) => {
       updateBallPosition(ball);
       handleBoundaryCollision(ball, gameState.boundary);
       handleBlockCollision(ball, gameState.blocks);
@@ -36,13 +35,13 @@ export function useGameLoop(
     handleBallToBallCollision(gameState.balls);
 
     // Rendering
-    drawBackground(ctx, backgroundImage);
+    clearCanvas(ctx);
     drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
     animationIdRef.current = requestAnimationFrame(gameLoop);
-  }, [canvasRef, gameState, backgroundImage]);
+  }, [canvasRef, gameState]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,7 +51,7 @@ export function useGameLoop(
     if (!ctx) return;
 
     // Initial rendering
-    drawBackground(ctx, backgroundImage);
+    clearCanvas(ctx);
     drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
@@ -65,5 +64,5 @@ export function useGameLoop(
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [gameLoop, canvasRef, gameState, backgroundImage]);
+  }, [gameLoop, canvasRef, gameState]);
 }
