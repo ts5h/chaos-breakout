@@ -7,7 +7,7 @@ import {
   handleBallToBallCollision,
 } from "../utils/physics";
 import {
-  clearCanvas,
+  drawBackground,
   drawBoundary,
   drawBalls,
   drawBlocks,
@@ -16,6 +16,7 @@ import {
 export function useGameLoop(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   gameState: GameState,
+  backgroundImage: HTMLImageElement | null,
 ) {
   const animationIdRef = useRef<number | undefined>(undefined);
 
@@ -35,13 +36,13 @@ export function useGameLoop(
     handleBallToBallCollision(gameState.balls);
 
     // Rendering
-    clearCanvas(ctx);
+    drawBackground(ctx, backgroundImage);
     drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
     animationIdRef.current = requestAnimationFrame(gameLoop);
-  }, [canvasRef, gameState]);
+  }, [canvasRef, gameState, backgroundImage]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -51,7 +52,7 @@ export function useGameLoop(
     if (!ctx) return;
 
     // Initial rendering
-    clearCanvas(ctx);
+    drawBackground(ctx, backgroundImage);
     drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
@@ -64,5 +65,5 @@ export function useGameLoop(
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [gameLoop, canvasRef, gameState]);
+  }, [gameLoop, canvasRef, gameState, backgroundImage]);
 }

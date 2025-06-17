@@ -5,6 +5,19 @@ export function clearCanvas(ctx: CanvasRenderingContext2D): void {
   ctx.clearRect(0, 0, GAME_CONFIG.WIDTH, GAME_CONFIG.HEIGHT);
 }
 
+export function drawBackground(
+  ctx: CanvasRenderingContext2D,
+  backgroundImage: HTMLImageElement | null,
+): void {
+  if (backgroundImage && backgroundImage.complete) {
+    ctx.drawImage(backgroundImage, 0, 0, GAME_CONFIG.WIDTH, GAME_CONFIG.HEIGHT);
+  } else {
+    // Fallback to black background if image not loaded
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, GAME_CONFIG.WIDTH, GAME_CONFIG.HEIGHT);
+  }
+}
+
 export function drawBoundary(
   ctx: CanvasRenderingContext2D,
   boundary: Boundary,
