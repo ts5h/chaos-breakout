@@ -1,5 +1,5 @@
-import type { Ball, Block, Boundary } from "../types/game";
 import { GAME_CONFIG } from "../constants/game";
+import type { Ball, Block, Boundary } from "../types/game";
 
 export function clearCanvas(ctx: CanvasRenderingContext2D): void {
   ctx.clearRect(0, 0, GAME_CONFIG.WIDTH, GAME_CONFIG.HEIGHT);
@@ -40,7 +40,7 @@ export function drawBlocks(
   ctx: CanvasRenderingContext2D,
   blocks: Block[],
 ): void {
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
   for (const block of blocks) {
     if (!block.destroyed) {
       ctx.fillRect(block.x, block.y, block.width, block.height);

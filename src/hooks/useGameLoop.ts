@@ -1,17 +1,12 @@
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { type RefObject, useCallback, useEffect, useRef } from "react";
 import type { GameState } from "../types/game";
 import {
-  updateBallPosition,
-  handleBoundaryCollision,
-  handleBlockCollision,
   handleBallToBallCollision,
+  handleBlockCollision,
+  handleBoundaryCollision,
+  updateBallPosition,
 } from "../utils/physics";
-import {
-  clearCanvas,
-  drawBoundary,
-  drawBalls,
-  drawBlocks,
-} from "../utils/renderer";
+import { clearCanvas, drawBalls, drawBlocks } from "../utils/renderer";
 
 export function useGameLoop(
   canvasRef: RefObject<HTMLCanvasElement | null>,
@@ -36,7 +31,6 @@ export function useGameLoop(
 
     // Rendering
     clearCanvas(ctx);
-    drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
@@ -52,7 +46,6 @@ export function useGameLoop(
 
     // Initial rendering
     clearCanvas(ctx);
-    drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 

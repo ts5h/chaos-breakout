@@ -1,17 +1,41 @@
+import { COMPLEX_BOUNDARY, GAME_CONFIG } from "../constants/game";
 import type { Ball, Block } from "../types/game";
-import { GAME_CONFIG, COMPLEX_BOUNDARY } from "../constants/game";
 import { isPointInside } from "./physics";
 
 export function createInitialBalls(): Ball[] {
   const balls: Ball[] = [];
-  const angleStep = (2 * Math.PI) / 3;
+  const angleStep = (2 * Math.PI) / GAME_CONFIG.BALL_COUNT;
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < GAME_CONFIG.BALL_COUNT; i++) {
     const angle = i * angleStep;
 
+    // Find a random position within the boundary
+    let x: number;
+    let y: number;
+    let attempts = 0;
+    const maxAttempts = 1000;
+
+    do {
+      // Generate random position within canvas bounds
+      x =
+        Math.random() * (GAME_CONFIG.WIDTH - 2 * GAME_CONFIG.BALL_RADIUS) +
+        GAME_CONFIG.BALL_RADIUS;
+      y =
+        Math.random() * (GAME_CONFIG.HEIGHT - 2 * GAME_CONFIG.BALL_RADIUS) +
+        GAME_CONFIG.BALL_RADIUS;
+      attempts++;
+
+      if (attempts >= maxAttempts) {
+        // Fallback to center if we can't find a valid position
+        x = GAME_CONFIG.WIDTH / 2;
+        y = GAME_CONFIG.HEIGHT / 2;
+        break;
+      }
+    } while (!isPointInside(x, y, COMPLEX_BOUNDARY));
+
     balls.push({
-      x: GAME_CONFIG.WIDTH / 2,
-      y: GAME_CONFIG.HEIGHT / 2,
+      x,
+      y,
       vx: Math.cos(angle) * GAME_CONFIG.BALL_SPEED,
       vy: Math.sin(angle) * GAME_CONFIG.BALL_SPEED,
       radius: GAME_CONFIG.BALL_RADIUS,
@@ -31,7 +55,7 @@ export function createInitialBlocks(): Block[] {
       const blockY =
         row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y;
 
-      // Check all four corners of the block to ensure it's completely inside the boundary
+      // Skip blocks that would extend outside the boundary by checking all four corners
       const topLeft = isPointInside(blockX, blockY, COMPLEX_BOUNDARY);
       const topRight = isPointInside(
         blockX + GAME_CONFIG.BLOCK_WIDTH,

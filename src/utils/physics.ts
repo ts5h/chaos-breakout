@@ -1,5 +1,6 @@
-import type { Ball, Block, Boundary } from "../types/game";
 import { GAME_CONFIG } from "../constants/game";
+import type { Ball, Block, Boundary } from "../types/game";
+import { playCollisionSound } from "./sound";
 
 export function isPointInside(
   x: number,
@@ -38,6 +39,11 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
     }
     if (hitY) {
       ball.vy = -ball.vy;
+    }
+
+    // Play collision sound when hitting boundary
+    if (hitX || hitY) {
+      playCollisionSound();
     }
 
     // If hit both axes (corner), apply additional random factor
@@ -104,6 +110,9 @@ export function handleBlockCollision(ball: Ball, blocks: Block[]): void {
       const newAngle = angle + angleVariation;
       ball.vx = Math.cos(newAngle) * speed;
       ball.vy = Math.sin(newAngle) * speed;
+
+      // Play collision sound for block hit
+      playCollisionSound();
     }
   }
 }
@@ -125,24 +134,26 @@ export function handleBallToBallCollision(balls: Ball[]): void {
         const nx = dx / distance;
         const ny = dy / distance;
 
-        // Relative velocity
-        const dvx = ball2.vx - ball1.vx;
-        const dvy = ball2.vy - ball1.vy;
+        // Calculate collision tangent
+        const tx = -ny;
+        const ty = nx;
 
-        // Relative velocity in collision normal direction
-        const dvn = dvx * nx + dvy * ny;
+        // Project velocities onto collision normal and tangent
+        const v1n = ball1.vx * nx + ball1.vy * ny;
+        const v1t = ball1.vx * tx + ball1.vy * ty;
+        const v2n = ball2.vx * nx + ball2.vy * ny;
+        const v2t = ball2.vx * tx + ball2.vy * ty;
 
         // Do not resolve if velocities are separating
-        if (dvn > 0) continue;
+        // v1n - v2n is the relative velocity along normal (positive means approaching)
+        if (v1n - v2n < 0) continue;
 
-        // Collision impulse
-        const impulse = (2 * dvn) / 2; // Equal mass assumption
-
-        // Update velocities
-        ball1.vx -= impulse * nx;
-        ball1.vy -= impulse * ny;
-        ball2.vx += impulse * nx;
-        ball2.vy += impulse * ny;
+        // For elastic collision with equal mass, velocities along normal are exchanged
+        // Velocities along tangent remain unchanged
+        ball1.vx = v2n * nx + v1t * tx;
+        ball1.vy = v2n * ny + v1t * ty;
+        ball2.vx = v1n * nx + v2t * tx;
+        ball2.vy = v1n * ny + v2t * ty;
 
         // Separate balls to prevent overlap
         const overlap = minDistance - distance;
@@ -159,16 +170,19 @@ export function handleBallToBallCollision(balls: Ball[]): void {
           (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION;
 
         // Apply angle variation to ball1
-        const speed1 = Math.sqrt(ball1.vx * ball1.vx + ball1.vy * ball1.vy);
         const angle1 = Math.atan2(ball1.vy, ball1.vx) + angleVariation;
-        ball1.vx = Math.cos(angle1) * speed1;
-        ball1.vy = Math.sin(angle1) * speed1;
+        // Ensure speed is maintained at BALL_SPEED
+        ball1.vx = Math.cos(angle1) * GAME_CONFIG.BALL_SPEED;
+        ball1.vy = Math.sin(angle1) * GAME_CONFIG.BALL_SPEED;
 
         // Apply opposite angle variation to ball2
-        const speed2 = Math.sqrt(ball2.vx * ball2.vx + ball2.vy * ball2.vy);
         const angle2 = Math.atan2(ball2.vy, ball2.vx) - angleVariation;
-        ball2.vx = Math.cos(angle2) * speed2;
-        ball2.vy = Math.sin(angle2) * speed2;
+        // Ensure speed is maintained at BALL_SPEED
+        ball2.vx = Math.cos(angle2) * GAME_CONFIG.BALL_SPEED;
+        ball2.vy = Math.sin(angle2) * GAME_CONFIG.BALL_SPEED;
+
+        // Play collision sound for ball-to-ball collision
+        playCollisionSound();
       }
     }
   }
