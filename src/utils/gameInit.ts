@@ -5,9 +5,10 @@ import { isPointInside } from "./physics";
 export function createInitialBalls(): Ball[] {
   const balls: Ball[] = [];
   const angleStep = (2 * Math.PI) / 3;
-  
+
   for (let i = 0; i < 3; i++) {
     const angle = i * angleStep;
+
     balls.push({
       x: GAME_CONFIG.WIDTH / 2,
       y: GAME_CONFIG.HEIGHT / 2,
@@ -16,7 +17,7 @@ export function createInitialBalls(): Ball[] {
       radius: GAME_CONFIG.BALL_RADIUS,
     });
   }
-  
+
   return balls;
 }
 

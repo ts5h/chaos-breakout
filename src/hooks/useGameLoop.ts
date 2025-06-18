@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import type { GameState } from "../types/game";
 import {
   updateBallPosition,
@@ -14,7 +14,7 @@ import {
 } from "../utils/renderer";
 
 export function useGameLoop(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
+  canvasRef: RefObject<HTMLCanvasElement | null>,
   gameState: GameState,
 ) {
   const animationIdRef = useRef<number | undefined>(undefined);
@@ -27,7 +27,7 @@ export function useGameLoop(
     if (!ctx) return;
 
     // Physics simulation
-    gameState.balls.forEach(ball => {
+    gameState.balls.forEach((ball) => {
       updateBallPosition(ball);
       handleBoundaryCollision(ball, gameState.boundary);
       handleBlockCollision(ball, gameState.blocks);
