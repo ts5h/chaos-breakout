@@ -33,7 +33,7 @@ export function drawBlocks(
   ctx: CanvasRenderingContext2D,
   blocks: Block[],
 ): void {
-  ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+  ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.5})`;
   for (const block of blocks) {
     if (!block.destroyed) {
       ctx.fillRect(block.x, block.y, block.width, block.height);

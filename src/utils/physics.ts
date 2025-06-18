@@ -43,7 +43,7 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
 
     // Play collision sound when hitting boundary
     if (hitX || hitY) {
-      playCollisionSound();
+      playCollisionSound("boundary");
     }
 
     // If hit both axes (corner), apply additional random factor
@@ -112,7 +112,7 @@ export function handleBlockCollision(ball: Ball, blocks: Block[]): void {
       ball.vy = Math.sin(newAngle) * speed;
 
       // Play collision sound for block hit
-      playCollisionSound();
+      playCollisionSound("block");
     }
   }
 }
@@ -182,7 +182,7 @@ export function handleBallToBallCollision(balls: Ball[]): void {
         ball2.vy = Math.sin(angle2) * GAME_CONFIG.BALL_SPEED;
 
         // Play collision sound for ball-to-ball collision
-        playCollisionSound();
+        playCollisionSound("ball");
       }
     }
   }
