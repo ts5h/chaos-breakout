@@ -20,8 +20,9 @@ This is a chaos-style breakout game built with React, TypeScript, and Canvas API
 The game uses a custom hook-based architecture:
 
 - **useGameState**: Manages immutable game state (balls, blocks, boundary)
-- **useGameLoop**: Handles the animation loop, physics updates, and rendering
+- **useGameLoop**: Handles the animation loop, physics updates, and rendering with pause functionality
 - **GameCanvas**: React component that owns the canvas and coordinates the game
+- **Game Start**: Game starts paused on load, begins when user clicks anywhere on screen
 
 ### Physics System
 
@@ -80,3 +81,4 @@ src/
 4. **No User Input**: Fully automated gameplay with no paddle or controls
 5. **Multiple Balls**: 5 balls with random starting positions create more dynamic gameplay
 6. **Constant Speed**: Ball speeds are enforced to remain constant after all collisions
+7. **Click to Start**: Game loads in paused state with balls hidden, starts on first click
