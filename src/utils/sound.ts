@@ -1,12 +1,6 @@
 import * as Tone from "tone";
 
 // Create a single synth instance for all collision sounds
-const reverb = new Tone.Reverb({
-  decay: 4000,
-  preDelay: 0.01,
-  wet: 0.5,
-});
-
 const synth = new Tone.Synth({
   oscillator: {
     type: "fmsine4",
@@ -15,9 +9,9 @@ const synth = new Tone.Synth({
     attack: 0.001,
     decay: 0.1,
     sustain: 0,
-    release: 1,
+    release: 4,
   },
-}).chain(reverb).
+}).
 toDestination();
 
 // Frequency range for low bass sounds (audible range)
@@ -38,12 +32,14 @@ export async function initializeAudio(): Promise<void> {
 let lastTriggerTime = 0;
 
 export function playCollisionSound(): void {
-  const frequency = getRandomFrequency() * 0.5;
+  const frequency1 = getRandomFrequency();
+  const frequency2 = frequency1 * 0.5;
   const now = Tone.now();
   
   // Ensure there's at least a tiny gap between triggers
   const triggerTime = Math.max(now, lastTriggerTime + 0.001);
-  synth.triggerAttackRelease(frequency, "64n", triggerTime);
+  synth.triggerAttackRelease(frequency1, "64n", triggerTime);
+  synth.triggerAttackRelease(frequency2, "64n", triggerTime + 0.01);
 
   lastTriggerTime = triggerTime;
 }
