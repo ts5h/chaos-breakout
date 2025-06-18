@@ -20,13 +20,6 @@ export function drawBoundary(
   ctx.stroke();
 }
 
-export function drawBall(ctx: CanvasRenderingContext2D, ball: Ball): void {
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fill();
-}
-
 export function drawBalls(ctx: CanvasRenderingContext2D, balls: Ball[]): void {
   ctx.fillStyle = "#fff";
   for (const ball of balls) {
