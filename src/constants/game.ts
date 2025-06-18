@@ -3,7 +3,7 @@ import type { Boundary } from "../types/game";
 export const GAME_CONFIG = {
   WIDTH: 1200,
   HEIGHT: 1200,
-  BALL_SPEED: 20,
+  BALL_SPEED: 10,
   BALL_RADIUS: 8,
   BLOCK_WIDTH: 50,
   BLOCK_HEIGHT: 18,
