@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { type RefObject, useCallback, useEffect, useRef } from "react";
 import type { GameState } from "../types/game";
 import {
-  updateBallPosition,
-  handleBoundaryCollision,
-  handleBlockCollision,
   handleBallToBallCollision,
+  handleBlockCollision,
+  handleBoundaryCollision,
+  updateBallPosition,
 } from "../utils/physics";
 import {
   clearCanvas,
-  drawBoundary,
   drawBalls,
   drawBlocks,
+  drawBoundary,
 } from "../utils/renderer";
 
 export function useGameLoop(

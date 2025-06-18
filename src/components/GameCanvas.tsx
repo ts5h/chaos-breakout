@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { GAME_CONFIG } from "../constants/game";
-import { useGameState } from "../hooks/useGameState";
-import { useGameLoop } from "../hooks/useGameLoop";
 import backgroundImage from "../assets/background.jpg";
+import { GAME_CONFIG } from "../constants/game";
+import { useGameLoop } from "../hooks/useGameLoop";
+import { useGameState } from "../hooks/useGameState";
 
 export function GameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

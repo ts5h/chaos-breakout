@@ -1,5 +1,5 @@
-import type { Ball, Block, Boundary } from "../types/game";
 import { GAME_CONFIG } from "../constants/game";
+import type { Ball, Block, Boundary } from "../types/game";
 
 export function clearCanvas(ctx: CanvasRenderingContext2D): void {
   ctx.clearRect(0, 0, GAME_CONFIG.WIDTH, GAME_CONFIG.HEIGHT);

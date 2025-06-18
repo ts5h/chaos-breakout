@@ -1,5 +1,5 @@
-import type { Ball, Block, Boundary } from "../types/game";
 import { GAME_CONFIG } from "../constants/game";
+import type { Ball, Block, Boundary } from "../types/game";
 
 export function isPointInside(
   x: number,
@@ -125,24 +125,25 @@ export function handleBallToBallCollision(balls: Ball[]): void {
         const nx = dx / distance;
         const ny = dy / distance;
 
-        // Relative velocity
-        const dvx = ball2.vx - ball1.vx;
-        const dvy = ball2.vy - ball1.vy;
+        // Calculate collision tangent
+        const tx = -ny;
+        const ty = nx;
 
-        // Relative velocity in collision normal direction
-        const dvn = dvx * nx + dvy * ny;
+        // Project velocities onto collision normal and tangent
+        const v1n = ball1.vx * nx + ball1.vy * ny;
+        const v1t = ball1.vx * tx + ball1.vy * ty;
+        const v2n = ball2.vx * nx + ball2.vy * ny;
+        const v2t = ball2.vx * tx + ball2.vy * ty;
 
         // Do not resolve if velocities are separating
-        if (dvn > 0) continue;
+        if (v1n <= v2n) continue;
 
-        // Collision impulse
-        const impulse = (2 * dvn) / 2; // Equal mass assumption
-
-        // Update velocities
-        ball1.vx -= impulse * nx;
-        ball1.vy -= impulse * ny;
-        ball2.vx += impulse * nx;
-        ball2.vy += impulse * ny;
+        // For elastic collision with equal mass, velocities along normal are exchanged
+        // Velocities along tangent remain unchanged
+        ball1.vx = v2n * nx + v1t * tx;
+        ball1.vy = v2n * ny + v1t * ty;
+        ball2.vx = v1n * nx + v2t * tx;
+        ball2.vy = v1n * ny + v2t * ty;
 
         // Separate balls to prevent overlap
         const overlap = minDistance - distance;
