@@ -55,7 +55,7 @@ export function createInitialBlocks(): Block[] {
       const blockY =
         row * GAME_CONFIG.BLOCK_SPACING_Y + GAME_CONFIG.BLOCK_OFFSET_Y;
 
-      // Check all four corners of the block to ensure it's completely inside the boundary
+      // Skip blocks that would extend outside the boundary by checking all four corners
       const topLeft = isPointInside(blockX, blockY, COMPLEX_BOUNDARY);
       const topRight = isPointInside(
         blockX + GAME_CONFIG.BLOCK_WIDTH,

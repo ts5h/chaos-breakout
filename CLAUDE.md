@@ -19,7 +19,7 @@ This is a chaos-style breakout game built with React, TypeScript, and Canvas API
 
 The game uses a custom hook-based architecture:
 
-- **useGameState**: Manages immutable game state (ball, blocks, boundary)
+- **useGameState**: Manages immutable game state (balls, blocks, boundary)
 - **useGameLoop**: Handles the animation loop, physics updates, and rendering
 - **GameCanvas**: React component that owns the canvas and coordinates the game
 
@@ -30,14 +30,18 @@ The physics system implements chaotic ball behavior:
 - Boundary collision uses ray-casting algorithm for complex polygon shapes
 - Axis-based collision detection prevents balls from getting stuck in walls
 - Corner collisions add additional randomness (0.8-1.2x speed multiplier)
+- Ball-to-ball collisions use elastic collision physics with constant speed enforcement
+- Multiple balls (5 by default) start at random positions within the boundary
 
 ### Game Configuration
 
 All game parameters are centralized in `src/constants/game.ts`:
-- Canvas dimensions: 1200x800
-- Ball speed: 20 (very fast)
+- Canvas dimensions: 1200x1200
+- Ball count: 5 (configurable via `BALL_COUNT`)
+- Ball speed: 15 (fast)
 - Complex boundary defined as static coordinate array
-- Block layout: 15x20 grid with 55x25 spacing
+- Block layout: 15x20 grid with 45x20 spacing (block size: 40x14)
+- Background image support
 
 ### Code Organization
 
@@ -59,7 +63,9 @@ src/
 
 ### Key Design Decisions
 
-1. **Mutable State in Hooks**: Game objects (ball, blocks) are intentionally mutable for performance in animation loops
+1. **Mutable State in Hooks**: Game objects (balls, blocks) are intentionally mutable for performance in animation loops
 2. **Static Boundary**: Complex polygon defined as fixed coordinates rather than generated shapes
 3. **Chaos Physics**: Intentional unpredictability through angle variation and randomized corner bounces
 4. **No User Input**: Fully automated gameplay with no paddle or controls
+5. **Multiple Balls**: 5 balls with random starting positions create more dynamic gameplay
+6. **Constant Speed**: Ball speeds are enforced to remain constant after all collisions

@@ -6,12 +6,7 @@ import {
   handleBoundaryCollision,
   updateBallPosition,
 } from "../utils/physics";
-import {
-  clearCanvas,
-  drawBalls,
-  drawBlocks,
-  drawBoundary,
-} from "../utils/renderer";
+import { clearCanvas, drawBalls, drawBlocks } from "../utils/renderer";
 
 export function useGameLoop(
   canvasRef: RefObject<HTMLCanvasElement | null>,
@@ -36,7 +31,6 @@ export function useGameLoop(
 
     // Rendering
     clearCanvas(ctx);
-    drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
@@ -52,7 +46,6 @@ export function useGameLoop(
 
     // Initial rendering
     clearCanvas(ctx);
-    drawBoundary(ctx, gameState.boundary);
     drawBalls(ctx, gameState.balls);
     drawBlocks(ctx, gameState.blocks);
 
