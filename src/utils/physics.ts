@@ -1,5 +1,6 @@
 import { GAME_CONFIG } from "../constants/game";
 import type { Ball, Block, Boundary } from "../types/game";
+import { playCollisionSound } from "./sound";
 
 export function isPointInside(
   x: number,
@@ -38,6 +39,11 @@ export function handleBoundaryCollision(ball: Ball, boundary: Boundary): void {
     }
     if (hitY) {
       ball.vy = -ball.vy;
+    }
+
+    // Play collision sound when hitting boundary
+    if (hitX || hitY) {
+      playCollisionSound();
     }
 
     // If hit both axes (corner), apply additional random factor
@@ -104,6 +110,9 @@ export function handleBlockCollision(ball: Ball, blocks: Block[]): void {
       const newAngle = angle + angleVariation;
       ball.vx = Math.cos(newAngle) * speed;
       ball.vy = Math.sin(newAngle) * speed;
+
+      // Play collision sound for block hit
+      playCollisionSound();
     }
   }
 }
@@ -171,6 +180,9 @@ export function handleBallToBallCollision(balls: Ball[]): void {
         // Ensure speed is maintained at BALL_SPEED
         ball2.vx = Math.cos(angle2) * GAME_CONFIG.BALL_SPEED;
         ball2.vy = Math.sin(angle2) * GAME_CONFIG.BALL_SPEED;
+
+        // Play collision sound for ball-to-ball collision
+        playCollisionSound();
       }
     }
   }

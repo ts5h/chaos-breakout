@@ -33,6 +33,17 @@ The physics system implements chaotic ball behavior:
 - Ball-to-ball collisions use elastic collision physics with constant speed enforcement
 - Multiple balls (5 by default) start at random positions within the boundary
 
+### Sound System
+
+The game uses Tone.js for immersive audio feedback:
+- FM synthesis (fmsine4) for rich harmonic collision sounds
+- Ultra-low bass frequencies (10-50 Hz after 0.5x multiplier)
+- 4-second reverb effect with 50% wet signal for atmospheric depth
+- Collision timing prevention system (0.001s minimum gap between triggers)
+- Plays on wall collisions, ball-to-ball collisions, and block hits
+- Audio context initialized on first user interaction (click or keypress)
+- Fast attack (0.001s) with extended release (1s) envelope
+
 ### Game Configuration
 
 All game parameters are centralized in `src/constants/game.ts`:
@@ -49,7 +60,7 @@ All game parameters are centralized in `src/constants/game.ts`:
 src/
 ├── types/          # TypeScript interfaces (Ball, Block, GameState)
 ├── constants/      # Game configuration and boundary coordinates  
-├── utils/          # Pure functions (physics, rendering, initialization)
+├── utils/          # Pure functions (physics, rendering, initialization, sound)
 ├── hooks/          # React hooks for state and game loop management
 └── components/     # React components (just GameCanvas)
 ```
