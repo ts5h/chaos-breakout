@@ -11,6 +11,7 @@ import { clearCanvas, drawBalls, drawBlocks } from "../utils/renderer";
 export function useGameLoop(
   canvasRef: RefObject<HTMLCanvasElement | null>,
   gameState: GameState,
+  isPaused: boolean,
 ) {
   const animationIdRef = useRef<number | undefined>(undefined);
 
@@ -21,21 +22,25 @@ export function useGameLoop(
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Physics simulation
-    gameState.balls.forEach((ball) => {
-      updateBallPosition(ball);
-      handleBoundaryCollision(ball, gameState.boundary);
-      handleBlockCollision(ball, gameState.blocks);
-    });
-    handleBallToBallCollision(gameState.balls);
+    // Physics simulation (only when not paused)
+    if (!isPaused) {
+      gameState.balls.forEach((ball) => {
+        updateBallPosition(ball);
+        handleBoundaryCollision(ball, gameState.boundary);
+        handleBlockCollision(ball, gameState.blocks);
+      });
+      handleBallToBallCollision(gameState.balls);
+    }
 
     // Rendering
     clearCanvas(ctx);
-    drawBalls(ctx, gameState.balls);
+    if (!isPaused) {
+      drawBalls(ctx, gameState.balls);
+    }
     drawBlocks(ctx, gameState.blocks);
 
     animationIdRef.current = requestAnimationFrame(gameLoop);
-  }, [canvasRef, gameState]);
+  }, [canvasRef, gameState, isPaused]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,7 +51,9 @@ export function useGameLoop(
 
     // Initial rendering
     clearCanvas(ctx);
-    drawBalls(ctx, gameState.balls);
+    if (!isPaused) {
+      drawBalls(ctx, gameState.balls);
+    }
     drawBlocks(ctx, gameState.blocks);
 
     // Start game loop
