@@ -3,7 +3,7 @@ import * as Tone from "tone";
 // Create a single synth instance for all collision sounds
 const synth = new Tone.Synth({
   oscillator: {
-    type: "fmsine4",
+    type: "fmsine7",
   },
   envelope: {
     attack: 0.001,
