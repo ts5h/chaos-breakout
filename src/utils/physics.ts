@@ -136,7 +136,8 @@ export function handleBallToBallCollision(balls: Ball[]): void {
         const v2t = ball2.vx * tx + ball2.vy * ty;
 
         // Do not resolve if velocities are separating
-        if (v1n <= v2n) continue;
+        // v1n - v2n is the relative velocity along normal (positive means approaching)
+        if (v1n - v2n < 0) continue;
 
         // For elastic collision with equal mass, velocities along normal are exchanged
         // Velocities along tangent remain unchanged
@@ -160,16 +161,16 @@ export function handleBallToBallCollision(balls: Ball[]): void {
           (Math.random() - 0.5) * GAME_CONFIG.REFLECTION_ANGLE_VARIATION;
 
         // Apply angle variation to ball1
-        const speed1 = Math.sqrt(ball1.vx * ball1.vx + ball1.vy * ball1.vy);
         const angle1 = Math.atan2(ball1.vy, ball1.vx) + angleVariation;
-        ball1.vx = Math.cos(angle1) * speed1;
-        ball1.vy = Math.sin(angle1) * speed1;
+        // Ensure speed is maintained at BALL_SPEED
+        ball1.vx = Math.cos(angle1) * GAME_CONFIG.BALL_SPEED;
+        ball1.vy = Math.sin(angle1) * GAME_CONFIG.BALL_SPEED;
 
         // Apply opposite angle variation to ball2
-        const speed2 = Math.sqrt(ball2.vx * ball2.vx + ball2.vy * ball2.vy);
         const angle2 = Math.atan2(ball2.vy, ball2.vx) - angleVariation;
-        ball2.vx = Math.cos(angle2) * speed2;
-        ball2.vy = Math.sin(angle2) * speed2;
+        // Ensure speed is maintained at BALL_SPEED
+        ball2.vx = Math.cos(angle2) * GAME_CONFIG.BALL_SPEED;
+        ball2.vy = Math.sin(angle2) * GAME_CONFIG.BALL_SPEED;
       }
     }
   }
