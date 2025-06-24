@@ -10,6 +10,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `pnpm lint:fix` - Fix auto-fixable linting issues with Biome
 - `pnpm format` - Format code with Biome formatter
 - `pnpm preview` - Preview production build locally
+- `pnpm test` - Run test suite with Vitest
+- `pnpm test:ui` - Run tests with UI interface
+- `pnpm test:coverage` - Run tests with coverage report
 
 ## Project Architecture
 
