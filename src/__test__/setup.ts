@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
 // Mock Tone.js for tests
 global.AudioContext = class MockAudioContext {
